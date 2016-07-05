@@ -12,7 +12,7 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-"""Tests for ceilometer/publisher/monclient.py
+"""Tests for ceilosca/publisher/monclient.py
 """
 
 import datetime
@@ -23,9 +23,9 @@ from oslo_config import fixture as fixture_config
 from oslotest import base
 from oslotest import mockpatch
 
-from ceilometer import monasca_client as mon_client
-from ceilometer.publisher import monclient
 from ceilometer import sample
+from ceilosca import monasca_client as mon_client
+from ceilosca.publisher import monclient
 from monascaclient import ksclient
 
 
@@ -98,12 +98,16 @@ class TestMonascaPublisher(base.BaseTestCase):
     }
 
     opts = [
-        cfg.StrOpt("username", default="ceilometer"),
+        cfg.StrOpt("username", default="ceilosca"),
         cfg.StrOpt("password", default="password"),
         cfg.StrOpt("auth_url", default="http://192.168.10.6:5000"),
         cfg.StrOpt("project_name", default="service"),
         cfg.StrOpt("project_id", default="service"),
-        ]
+        cfg.StrOpt("project_domain_id", default="default"),
+        cfg.StrOpt("user_domain_id", default="default"),
+        cfg.StrOpt("project_domain_name", default="Default"),
+        cfg.StrOpt("user_domain_name", default="Default"),
+    ]
 
     @staticmethod
     def create_side_effect(exception_type, test_exception):
@@ -117,12 +121,12 @@ class TestMonascaPublisher(base.BaseTestCase):
     def setUp(self):
         super(TestMonascaPublisher, self).setUp()
         self.CONF = self.useFixture(fixture_config.Config()).conf
-        self.CONF([], project='ceilometer', validate_default_values=True)
+        self.CONF([], project='ceilosca', validate_default_values=True)
         self.CONF.register_opts(self.opts, group="service_credentials")
         self.parsed_url = mock.MagicMock()
         ksclient.KSClient = mock.MagicMock()
 
-    @mock.patch("ceilometer.publisher.monasca_data_filter."
+    @mock.patch("ceilosca.publisher.monasca_data_filter."
                 "MonascaDataFilter._get_mapping",
                 side_effect=[field_mappings])
     def test_publisher_publish(self, mapping_patch):
@@ -137,7 +141,7 @@ class TestMonascaPublisher(base.BaseTestCase):
             self.assertEqual(3, mock_create.call_count)
             self.assertEqual(1, mapping_patch.called)
 
-    @mock.patch("ceilometer.publisher.monasca_data_filter."
+    @mock.patch("ceilosca.publisher.monasca_data_filter."
                 "MonascaDataFilter._get_mapping",
                 side_effect=[field_mappings])
     def test_publisher_batch(self, mapping_patch):
@@ -156,7 +160,7 @@ class TestMonascaPublisher(base.BaseTestCase):
             self.assertEqual(1, mock_create.call_count)
             self.assertEqual(1, mapping_patch.called)
 
-    @mock.patch("ceilometer.publisher.monasca_data_filter."
+    @mock.patch("ceilosca.publisher.monasca_data_filter."
                 "MonascaDataFilter._get_mapping",
                 side_effect=[field_mappings])
     def test_publisher_batch_retry(self, mapping_patch):
@@ -180,7 +184,7 @@ class TestMonascaPublisher(base.BaseTestCase):
             self.assertEqual(4, mock_create.call_count)
             self.assertEqual(1, mapping_patch.called)
 
-    @mock.patch("ceilometer.publisher.monasca_data_filter."
+    @mock.patch("ceilosca.publisher.monasca_data_filter."
                 "MonascaDataFilter._get_mapping",
                 side_effect=[field_mappings])
     def test_publisher_archival_on_failure(self, mapping_patch):

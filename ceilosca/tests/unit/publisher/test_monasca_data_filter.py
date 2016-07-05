@@ -18,8 +18,8 @@ import mock
 from oslo_utils import timeutils
 from oslotest import base
 
-from ceilometer.publisher import monasca_data_filter as mdf
 from ceilometer import sample
+from ceilosca.publisher import monasca_data_filter as mdf
 
 
 class TestMonUtils(base.BaseTestCase):
@@ -63,7 +63,7 @@ class TestMonUtils(base.BaseTestCase):
             resource_metadata={'name': 'TestPublish'},
         )
 
-        to_patch = ("ceilometer.publisher.monasca_data_filter."
+        to_patch = ("ceilosca.publisher.monasca_data_filter."
                     "MonascaDataFilter._get_mapping")
         with mock.patch(to_patch, side_effect=[self._field_mappings]):
             data_filter = mdf.MonascaDataFilter()
@@ -99,7 +99,7 @@ class TestMonUtils(base.BaseTestCase):
         field_map['dimensions'].remove('project_id')
         field_map['dimensions'].remove('user_id')
 
-        to_patch = ("ceilometer.publisher.monasca_data_filter."
+        to_patch = ("ceilosca.publisher.monasca_data_filter."
                     "MonascaDataFilter._get_mapping")
         with mock.patch(to_patch, side_effect=[field_map]):
             data_filter = mdf.MonascaDataFilter()
@@ -123,7 +123,7 @@ class TestMonUtils(base.BaseTestCase):
                                'size': '1500'},
         )
 
-        to_patch = ("ceilometer.publisher.monasca_data_filter."
+        to_patch = ("ceilosca.publisher.monasca_data_filter."
                     "MonascaDataFilter._get_mapping")
         with mock.patch(to_patch, side_effect=[self._field_mappings]):
             data_filter = mdf.MonascaDataFilter()

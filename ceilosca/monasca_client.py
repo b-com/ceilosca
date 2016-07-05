@@ -62,6 +62,10 @@ class Client(object):
             'project_id': conf.project_id,
             'project_name': conf.project_name,
             'region_name': conf.region_name,
+            'project_domain_name': conf.project_domain_name,
+            'user_domain_name': conf.user_domain_name,
+            'project_domain_id': conf.project_domain_id,
+            'user_domain_id': conf.user_domain_id,
         }
 
         self._kwargs = kwargs

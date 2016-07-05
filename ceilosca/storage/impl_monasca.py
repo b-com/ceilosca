@@ -19,20 +19,19 @@
 import datetime
 import operator
 
+import ceilometer
+from ceilometer.i18n import _
+from ceilometer import storage
+from ceilometer.storage import base
+from ceilometer.storage import models as api_models
+from ceilometer import utils
+from ceilosca import monasca_client
+from ceilosca.publisher.monasca_data_filter import MonascaDataFilter
 from monascaclient import exc as monasca_exc
 from oslo_config import cfg
 from oslo_log import log
 from oslo_utils import netutils
 from oslo_utils import timeutils
-
-import ceilometer
-from ceilometer.i18n import _
-from ceilometer import monasca_client
-from ceilometer.publisher.monasca_data_filter import MonascaDataFilter
-from ceilometer import storage
-from ceilometer.storage import base
-from ceilometer.storage import models as api_models
-from ceilometer import utils
 
 
 OPTS = [
@@ -131,7 +130,7 @@ class Connection(base.Connection):
         """Write the data to the backend storage system.
 
         :param data: a dictionary such as returned by
-                     ceilometer.meter.meter_message_from_counter.
+                     ceilosca.meter.meter_message_from_counter.
         """
         LOG.info(_('metering data %(counter_name)s for %(resource_id)s: '
                    '%(counter_volume)s')
@@ -210,7 +209,7 @@ class Connection(base.Connection):
         _search_args = dict(
             start_time=start_timestamp,
             end_time=end_timestamp
-            )
+        )
 
         _search_args = {k: v for k, v in _search_args.items()
                         if v is not None}

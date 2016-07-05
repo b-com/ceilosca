@@ -16,17 +16,15 @@
 import os
 import time
 
+import ceilometer
+from ceilometer.i18n import _
+from ceilometer import publisher
+from ceilosca import monasca_client as mon_client
+from ceilosca.publisher.monasca_data_filter import MonascaDataFilter
+from monascaclient import exc
 from oslo_config import cfg
 from oslo_log import log
 from oslo_service import loopingcall
-
-import ceilometer
-from ceilometer.i18n import _
-from ceilometer import monasca_client as mon_client
-from ceilometer import publisher
-from ceilometer.publisher.monasca_data_filter import MonascaDataFilter
-
-from monascaclient import exc
 
 
 monpub_opts = [

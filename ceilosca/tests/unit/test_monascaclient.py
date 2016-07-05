@@ -18,7 +18,7 @@ from oslo_config import fixture as fixture_config
 from oslo_utils import netutils
 from oslotest import base
 
-from ceilometer import monasca_client
+from ceilosca import monasca_client
 from monascaclient import exc
 
 cfg.CONF.import_group('service_credentials', 'ceilometer.keystone_client')
@@ -27,17 +27,21 @@ cfg.CONF.import_group('service_credentials', 'ceilometer.keystone_client')
 class TestMonascaClient(base.BaseTestCase):
 
     opts = [
-        cfg.StrOpt("username", default="ceilometer"),
+        cfg.StrOpt("username", default="ceilosca"),
         cfg.StrOpt("password", default="password"),
         cfg.StrOpt("auth_url", default="http://192.168.10.6:5000"),
         cfg.StrOpt("project_name", default="service"),
         cfg.StrOpt("project_id", default="service"),
-        ]
+        cfg.StrOpt("project_domain_id", default="default"),
+        cfg.StrOpt("user_domain_id", default="default"),
+        cfg.StrOpt("project_domain_name", default="Default"),
+        cfg.StrOpt("user_domain_name", default="Default"),
+    ]
 
     def setUp(self):
         super(TestMonascaClient, self).setUp()
         self.CONF = self.useFixture(fixture_config.Config()).conf
-        self.CONF([], project='ceilometer', validate_default_values=True)
+        self.CONF([], project='ceilosca', validate_default_values=True)
         self.CONF.register_opts(self.opts, group="service_credentials")
 
         self.mc = self._get_client()

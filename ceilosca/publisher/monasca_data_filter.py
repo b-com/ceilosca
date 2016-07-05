@@ -14,13 +14,13 @@
 # under the License.
 
 import datetime
-from oslo_config import cfg
-from oslo_log import log
-from oslo_utils import timeutils
 import yaml
 
 from ceilometer.i18n import _LI
 from ceilometer import sample as sample_util
+from oslo_config import cfg
+from oslo_log import log
+from oslo_utils import timeutils
 
 OPTS = [
     cfg.StrOpt('monasca_mappings',

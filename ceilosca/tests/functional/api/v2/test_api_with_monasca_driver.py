@@ -54,13 +54,13 @@ class TestApi(test_base.BaseTestCase):
 
     def get_connection_with_mock_driver_manager(self, url, namespace):
         mgr = self._get_driver_from_entry_point(
-            entry_point='monasca = ceilometer.storage.impl_monasca:Connection',
+            entry_point='monasca = ceilosca.storage.impl_monasca:Connection',
             namespace='ceilometer.metering.storage')
         return mgr.driver(url)
 
     def get_publisher_with_mock_driver_manager(self, url, namespace):
         mgr = self._get_driver_from_entry_point(
-            entry_point='monasca = ceilometer.publisher.monclient:'
+            entry_point='monasca = ceilosca.publisher.monclient:'
                         'MonascaPublisher',
             namespace='ceilometer.publisher')
         return mgr.driver(url)
@@ -88,7 +88,7 @@ class TestApi(test_base.BaseTestCase):
         )
 
         self.CONF.import_opt('monasca_mappings',
-                             'ceilometer.publisher.monasca_data_filter',
+                             'ceilosca.publisher.monasca_data_filter',
                              group='monasca')
 
         self.CONF.set_override(
@@ -97,7 +97,7 @@ class TestApi(test_base.BaseTestCase):
             group='monasca'
         )
 
-        with mock.patch("ceilometer.monasca_client.Client") as mock_client,\
+        with mock.patch("ceilosca.monasca_client.Client") as mock_client,\
                 mock.patch('ceilometer.storage.get_connection') as \
                 get_storage_conn, \
                 mock.patch('ceilometer.publisher.get_publisher') as get_pub:
