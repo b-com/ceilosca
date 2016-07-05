@@ -8,12 +8,14 @@ Python plugin and storage driver for Ceilometer to send samples to monasca-api
 - Clone this project
 
 - Install the module ceilosca
-
+```shell
       # cd ceilosca
       # pip install --upgrade .
+```
 
 - Check that ceilosca entry points are correctly referenced:
 
+```shell
       # pip install entry-point-inspector
       # epi group show ceilometer.metering.storage
       +------------+------------------------------------+------------+---------------------+---------------------------+
@@ -40,7 +42,7 @@ Python plugin and storage driver for Ceilometer to send samples to monasca-api
       | test     | ceilometer.publisher.test         | TestPublisher           | ceilometer 6.0.0    |                       |
       | notifier | ceilometer.publisher.messaging    | SampleNotifierPublisher | ceilometer 6.0.0    |                       |
       +----------+-----------------------------------+-------------------------+---------------------+-----------------------+
-
+```
 
 # License
 
