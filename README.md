@@ -1,7 +1,15 @@
 ceilosca
 ========
 
-Python plugin and storage driver for Ceilometer to send samples to monasca-api
+Python plugin and storage driver for OpenStack Telemetry service, i.e. 
+Ceilometer, to send samples to Monasca API.
+
+This python project is a complete refactoring of the project 
+[monasca-ceilometer](https://github.com/openstack/monasca-ceilometer).
+
+### Installation Pre-requisites
+You have to install the Telemetry service according to this
+[documentation](http://docs.openstack.org/mitaka/install-guide-ubuntu/ceilometer-install.html). 
 
 ### Installation Instructions for setting up Ceilosca manually
 
@@ -13,7 +21,8 @@ Python plugin and storage driver for Ceilometer to send samples to monasca-api
       # pip install --upgrade .
 ```
 
-- Check that ceilosca entry points are correctly referenced:
+- Check that ceilosca entry points (named ``monasca``) are correctly referenced, 
+without errors:
 
 ```shell
       # pip install entry-point-inspector
@@ -42,6 +51,50 @@ Python plugin and storage driver for Ceilometer to send samples to monasca-api
       | test     | ceilometer.publisher.test         | TestPublisher           | ceilometer 6.0.0    |                       |
       | notifier | ceilometer.publisher.messaging    | SampleNotifierPublisher | ceilometer 6.0.0    |                       |
       +----------+-----------------------------------+-------------------------+---------------------+-----------------------+
+```
+
+
+# Configuration
+You have to configure the Telemetry service in order to use Ceilosca as the 
+storage backend and the publisher default driver as well.
+
+## Set Ceilosca as the default storage backend
+Edit the file ``/etc/ceilometer/ceilometer.conf`` and update the parameter
+``metering_connection`` with the Manasca API URL.
+
+```shell
+# The connection string used to connect to the metering database. (if
+# unset, connection is used) (string value)
+#metering_connection = <None>
+metering_connection = monasca://http://<MONASCA_API_IP>:8070/v2.0
+
+```
+
+You will find an example in etc/ceilometer directory.
+
+## Set Ceilosca as the default publisher
+Update the file ``/etc/ceilometer/pipeline.yaml`` in order to forward the
+metrics to Monasca API, by addding ``publishers`` URL.
+
+You will find an example in etc/ceilometer directory.
+
+## Add the customized metrics fowarded to Monasca
+Copy/Paste the file ``etc/ceilometer/monasca_field_definitions.yaml`` into 
+``/etc/ceilometer`` directory. This file contains filtering keys used by the
+``MonascaDataFilter`` class to forward to Monasca API a metric with a subset
+of the original sample fields.
+
+## Configure the credentials
+Check in the file ``/etc/ceilometer/ceilometer.conf`` the section
+ ``service_credentials``. Username defined in this section must have a correct 
+ role to access to the Monasca API. For more information, read this 
+ [documentation](http://docs.openstack.org/admin-guide/identity-concepts.html)
+
+# Testing
+You can run unitaty tests by using the ``tox`` command:
+```shell
+      # cd ceilosca
+      # tox -epy27
 ```
 
 # License
